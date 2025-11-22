@@ -1,39 +1,105 @@
-Role Name
-=========
+📦 Ansible LVM Automation Role
 
-A brief description of the role goes here.
 
-Requirements
-------------
+A fully automated Ansible Role for creating, managing, extending, and removing Logical Volumes (LVM) using variables and dictionary-based configuration.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This project is designed as part of a professional-level Linux & Automation learning program and is suitable for real enterprise use.
 
-Role Variables
---------------
+🚀 Project Overview
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+This Ansible role automates complete LVM lifecycle operations:
 
-Dependencies
-------------
+Create Physical Volumes (PV)
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Create Volume Groups (VG)
 
-Example Playbook
-----------------
+Create Multiple Logical Volumes (LV) using dictionary variables
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Format filesystems (ext4, xfs)
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+Mount filesystems persistently
 
-License
--------
+Extend logical volumes
 
-BSD
+Remove LV, VG, PV
 
-Author Information
-------------------
+Wipe filesystem signatures
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
-# Disk_LVM_Management
+📁 Role Folder Structure
+roles/lvm/
+│── tasks/
+│    ├── main.yml
+│    ├── create.yml
+│    ├── extend.yml
+│    ├── remove.yml
+│
+│── handlers/
+│    └── main.yml
+│
+│── defaults/
+│    └── main.yml
+│
+│── vars/
+│    └── main.yml
+│
+│── README.md
+
+🧩 Features Included (Labs 18 → 23)
+✅  Create LV & Mount Persistently
+
+Create VG (vg_logs)
+
+Create LVs (lv_old_logs, lv_new_logs)
+
+Format LV (ext4 / xfs)
+
+Mount on:
+
+
+✅ Remove LV and Wipe FS
+
+Unmount both LVs
+
+Remove LVs
+
+Remove VG
+
+Remove PV on /dev/sdb and /dev/sdc
+
+Wipe filesystem signatures
+
+✅ Extend Existing LV
+
+Extend lv_old_logs by +500M
+
+Resize ext4 filesystem
+
+✅ Complete Role Implementation
+
+This role uses:
+
+Handlers for formatting & mounting automatically
+
+Tasks for PV, VG, LV creation
+
+Loops for multiple LVs
+
+Notifications for modular automation
+
+3️⃣ Run the Role
+
+🛠️ Technologies Used
+Technology	    Purpose
+Ansible	        Automation engine
+LVM2	        Volume management
+YAML	        Configuration files
+Linux           RHEL / CentOS / Oracle Linux
+
+
+🏆 Why This Project Is Resume-Ready
+
+✔ Hands-on Linux storage automation
+✔ Real-world production-level role
+✔ Modular, scalable, clean YAML code
+✔ Implements notifications, handlers, loops, variables, best practices
+✔ Shows DevOps skills: Ansible + LVM + Linux filesystem
