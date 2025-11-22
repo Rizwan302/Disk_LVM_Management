@@ -1,0 +1,24 @@
+---
+# vars file for disk_managenment
+
+disk_size: 1G
+disk_path:
+  - {
+      partition_1: /dev/sdb,
+      size: 500M,
+      filesystem: ext4,
+      number: 1,
+      vg_group: vg_logs,
+      lv_name: lv_old_logs,
+      mount_point: /app/old/logs,
+      extend_lv: 500M,
+    }
+  - {
+      partition_1: /dev/sdb,
+      size: 500M,
+      filesystem: xfs,
+      number: 2,
+      vg_group: vg_logs,
+      lv_name: lv_new_logs,
+      mount_point: /app/new/logs,
+    }

@@ -1,0 +1,42 @@
+---
+# handlers file for disk_managenment
+
+- name: Create a Logical Volume
+  lvol:
+    vg: "{{ disk_path.vg_group }}"
+    lv: "{{ disk_path.lv_name }}"
+    size: "{{ disk_path.size }}"
+  loop: "{{ disk_path }}"
+
+# - name: Create a ext2 filesystem
+#   filesystem:
+#     fs_type: "{{ disk_path.filesystem }}"
+#     dev: "/dev/{{disk_path.vg_group}}/{{disk_path.lv_name}}"
+  
+- name: set mount_point
+  mount:
+    path: "{{ disk_path.mount_point }}"
+    src: "/dev/{{ disk_path.vg_group }}/{{ disk_path.lv_name }}"
+    fstype: "{{ disk_path.filesystem }}"
+    state: present
+  loop: "{{ disk_path }}"
+
+- name: Remove the Logical Volume
+  lvol:
+    vg: "{{ disk_path.vg_group }}"
+    lv: "{{ disk_path.lv_name }}"
+    state: absent
+    force: true
+  loop: "{{ disk_path }}"
+  tags: Remove Logical Volume
+
+- name: Remove volume group
+  lvg:
+    vg: "{{ disk_path.vg_group }}"
+    state: absent
+
+- name: Wipeout filesystem
+  filesystem:
+    dev: "{{ disk_path.partition_1 }}"
+    state: absent
+

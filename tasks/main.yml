@@ -1,0 +1,55 @@
+---
+# tasks file for disk_managenment
+
+- name: create multpal disk
+  parted:
+    device: "{{ disk_path.partition_1 }}"
+    number: "{{ disk_path.number }}"
+    state: present
+    fs_type: "{{ disk_path.filesystem }}"
+    part_end: "{{ disk_path.size }}"
+  loop: "{{ disk_path }}"
+
+- name: Create a volume
+  lvg:
+    pvs: "{{ disk_path.partition_1 }}"
+    state: present
+
+- name: create file path
+  file:
+    path: "{{ disk_path.mount_point }}"
+    state: directory
+    mode: 777
+  loop: "{{ disk_path }}"
+
+  
+- name: Create a Volume Group 
+  lvg: 
+    vg: "{{ disk_path.vg_group }}"
+    pvs: "{{ disk_path.partition_1 }}"
+    pesize: "{{ disk_path.size }}"
+  loop: "{{ disk_path }}"
+  notify: 
+    - Create a Logical Volume
+    - set mount_point
+
+- name: Unmount the “lv_old_logs” logical volume
+  mount:
+    path: "{{ disk_path.mount_point }}"
+    state: unmounted
+  loop: "{{ disk_path }}"
+  notify: 
+    - Remove the Logical Volume
+    - Remove volume group
+    - Wipeout filesystem
+  tags: Remove Logical Volume
+
+
+- name: Extend the logical volume to 500M
+  lvol:
+    vg: "{{ disk_path.vg_group }}"
+    lv: "{{ disk_path.lv_name }}"
+    size: "{{ disk_path.extend_lv }}"
+  tags: extend_lv
+
+
